@@ -1,0 +1,17 @@
+My problem is that after i got my first job i slowed down on my personal learning and 
+most of the skills i got from projects i was in . 
+So now i want to continue my learning and i did found my pretty old project 
+on wich i wanted to improve my symfony skill, as well as frontend skill
+
+So the idea of the project is folowwing - i getting info about diffrent cryptocurrencies ,
+listing them on page - there will be diffrent search options, diffrent filters etc.
+
+And i will have the ability to add some of crypto to favorite section. 
+So in this section i will get live price of selected crypto.
+
+Mostly i warked on 
+
+1. I have hardcoded dependencies, but obviosly i want to use dependency injections
+2. For the frontend part for now i have twig template engine, but now i am thinking to  use react or angular for injections
+Maybe it not really nessesery for small project like this 
+3. I want to use some patterns in this project becorse for now it's not clear area
