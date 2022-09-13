@@ -21,5 +21,11 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
+    Symfony\Component\Cache\Adapter\FilesystemAdapter:
+        autowire: true
+    # coins.get.servise:
+    #     class: 'App\Service\Coins\CoinsGetService'
+    
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
