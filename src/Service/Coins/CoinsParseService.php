@@ -32,8 +32,7 @@ class CoinsParseService
     public function parseAll():array
     {
         $path = '/api/v3/coins/list';
-        $coinsJson = $this->client->request('GET',$path)->getContent();
         
-        return json_decode($coinsJson);
+        return $this->client->request('GET',$path)->toArray();
     }
 }

@@ -5,7 +5,6 @@ namespace App\Service\Coins;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Repository\CoinRepository;
 use App\Models\Coin\CoinModel;
-use App\Service\Coins\CoinsFilters;
 
 /**
  * Class CoinsGetService
@@ -22,7 +21,7 @@ class CoinsGetService
      * @param HttpClientInterface $client
      * @param CoinRepository $coinRepository
      */
-    public function __construct(HttpClientInterface $coingeckoApiClient,CoinRepository $coinRepository)
+    public function __construct(private HttpClientInterface $coingeckoApiClient,CoinRepository $coinRepository)
     {
         $this->client = $coingeckoApiClient;
         $this->coinRepository = $coinRepository;

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CoinRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CoinRepository::class)]
 #[ORM\Table(name:"coins")]
@@ -25,11 +26,15 @@ class Coin
     private ?string $name = null;
 
     #[ORM\Column()]
+    #[Groups(['coin'])]
     private bool $isFavorite = false;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['coin', 'list'])]
     private ?\DateTimeInterface $created = null;
 
+    #[Groups(['coin', 'list'])]
+    private $users;
     
 
     public function getId(): ?int

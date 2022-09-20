@@ -18,7 +18,7 @@ class CoinsFilters {
     */
     public function __construct(array $params)
     {
-        $this->isFavorite = (isset($params['isFavorite']))? $params['isFavorite'] : null;
+        $this->isFavorite = $params['isFavorite'] ?? null;
         $this->page = (isset($params['page']))? $params['isFavorite'] : null;
         $this->pageSize = (isset($params['pageSize']))? $params['isFavorite'] : null;
     }

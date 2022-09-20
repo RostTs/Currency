@@ -39,20 +39,22 @@ class CoinRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Coin[] Returns an array of Coin objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Coin[] Returns an array of Coin objects
+     */
+    public function findByExampleField($value): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.id')
+            ->addSelect('c.name')
+            ->andWhere('c.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+    }
 
 //    public function findOneBySomeField($value): ?Coin
 //    {
