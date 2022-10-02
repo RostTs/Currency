@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Coins\CoinsGetService;
 use App\Service\Coins\CoinsFilters;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class CoinsController extends AbstractController
 {
@@ -20,6 +21,11 @@ class CoinsController extends AbstractController
     public function getList(Request $request,CoinsGetService $getService): Response
     {
        $params = new CoinsFilters($request->query->all());
-       return $this->json($getService->getAll($params));
+       return $this->json(
+        $getService->getAll($params), 
+        Response::HTTP_OK,
+        [],
+        [ObjectNormalizer::GROUPS => ['list']]
+    );
     }
 }
