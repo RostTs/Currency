@@ -4,7 +4,6 @@ namespace App\Service\Coins;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Repository\CoinRepository;
-use App\Models\Coin\CoinModel;
 use App\Service\Coins\CoinsFilters;
 use Symfony\Component\Serializer\SerializerInterface;
 

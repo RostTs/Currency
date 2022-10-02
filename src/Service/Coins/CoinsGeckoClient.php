@@ -6,9 +6,9 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Class CoinsParseService
+ * Class CoinsGeckoClient
  */
-class CoinsParseService 
+class CoinsGeckoClient 
 {
     /** @var FilesystemAdapter */
     private $adapter;
@@ -29,7 +29,7 @@ class CoinsParseService
     /**
      * @return array
      */
-    public function parseAll():array
+    public function getAll():array
     {
         $path = '/api/v3/coins/list';
         $coinsJson = $this->client->request('GET',$path)->getContent();
