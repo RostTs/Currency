@@ -48,7 +48,7 @@ class CoinsCreateService
 
         $progressBar->start();
         foreach($coins as $singleCoin){
-            if(!$this->coinRepository->findOneBy(['coingeckoId' => $singleCoin->id])){
+            if(!$this->coinRepository->findBy(['coingeckoId' => $singleCoin->id])){
                 $coin = new Coin();
                 $coin->setCoingeckoId($singleCoin->id);
                 $coin->setSymbol($singleCoin->symbol);

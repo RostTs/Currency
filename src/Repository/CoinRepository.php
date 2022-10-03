@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Coin;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Service\Coins\CoinsFilters;
 
 /**
  * @extends ServiceEntityRepository<Coin>
@@ -39,28 +40,27 @@ class CoinRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Coin[] Returns an array of Coin objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return Coin[]
+    */
+   public function findByExampleField(CoinsFilters $filters): array
+   {
+        $offset = ($filters->getPage() > 1) ? $filters->getPage() * $filters->getPageSize() : 0;
 
-//    public function findOneBySomeField($value): ?Coin
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if($filters->getIsFavorite()) {
+            return $this->createQueryBuilder('c')
+            ->andWhere('c.isFavorite = :isFavorite')
+            ->setParameter('isFavorite', $filters->getIsFavorite())
+            ->setMaxResults($filters->getPageSize())
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+        }
+
+       return $this->createQueryBuilder('c')
+           ->setMaxResults($filters->getPageSize())
+           ->setFirstResult($offset)
+           ->getQuery()
+           ->getResult();
+   }
 }

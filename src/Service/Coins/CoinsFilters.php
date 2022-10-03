@@ -10,17 +10,17 @@ class CoinsFilters {
     private $pageSize = 25;
 
     //---------------------------------------- FILTERS ----------------------------------------
-    /** @var bool|null */
-    private $isFavorite = null;
+    /** @var bool */
+    private $isFavorite = false;
 
     /** 
     * @param array $params
     */
     public function __construct(array $params)
     {
-        $this->isFavorite = (isset($params['isFavorite']))? $params['isFavorite'] : null;
-        $this->page = (isset($params['page']))? $params['isFavorite'] : null;
-        $this->pageSize = (isset($params['pageSize']))? $params['isFavorite'] : null;
+        $this->isFavorite = (isset($params['isFavorite']))? $params['isFavorite'] : $this->isFavorite;
+        $this->page = (isset($params['page']))? $params['page'] : $this->page;
+        $this->pageSize = (isset($params['pageSize']))? $params['pageSize'] : $this->pageSize;
     }
     
     /**

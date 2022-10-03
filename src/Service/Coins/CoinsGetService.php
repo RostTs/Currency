@@ -29,7 +29,7 @@ class CoinsGetService
      */
     public function getAll(CoinsFilters $filters):array
     {
-        $coins = $this->coinRepository->findAll();
+        $coins = $this->coinRepository->findByExampleField($filters);
         return $coins;
     }
 }
