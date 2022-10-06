@@ -2,10 +2,8 @@
 
 namespace App\Service\Coins;
 
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Repository\CoinRepository;
 use App\Service\Coins\CoinsFilters;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class CoinsGetService
@@ -13,13 +11,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 class CoinsGetService 
 {
     /**
-     * @param HttpClientInterface $client
      * @param CoinRepository $coinRepository
      */
     public function __construct(
-        private HttpClientInterface $client,
-        private CoinRepository $coinRepository,
-        private SerializerInterface $serializer
+        private CoinRepository $coinRepository
         ) {}
 
     /**

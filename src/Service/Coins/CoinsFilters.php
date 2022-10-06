@@ -4,21 +4,25 @@ namespace App\Service\Coins;
 
 class CoinsFilters {
     /** @var int */
-    private $page = 1;
+    private int $page = 1;
 
     /** @var int */
-    private $pageSize = 25;
+    private int $pageSize = 25;
 
     //---------------------------------------- FILTERS ----------------------------------------
     /** @var bool */
-    private $isFavorite = false;
+    private bool $isFavorite = false;
 
     /** 
     * @param array $params
     */
     public function __construct(array $params)
     {
-        $this->isFavorite = (isset($params['isFavorite']))? $params['isFavorite'] : $this->isFavorite;
+        if (array_key_exists('isFavorite',$params)) {
+            $this->isFavorite = $params['isFavorite'];
+        }
+        $this->isFavorite = ($params['isFavorite'])??  false;
+        // $this->isFavorite = (isset($params['isFavorite']))? $params['isFavorite'] : $this->isFavorite;
         $this->page = (isset($params['page']))? $params['page'] : $this->page;
         $this->pageSize = (isset($params['pageSize']))? $params['pageSize'] : $this->pageSize;
     }
@@ -46,5 +50,15 @@ class CoinsFilters {
     {
         return $this->pageSize;
     }
+
+    //TODO: make get offet methid
+
+       /**
+     * @return int
+     */
+    // public function make..(): int
+    // {
+    //     return $this->pageSize;
+    // }
 
 }

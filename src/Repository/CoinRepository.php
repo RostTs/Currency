@@ -40,6 +40,7 @@ class CoinRepository extends ServiceEntityRepository
         }
     }
 
+    //TODO: rename
    /**
     * @return Coin[]
     */
@@ -56,6 +57,13 @@ class CoinRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
         }
+
+    //TODO: rebuild qb
+
+        // $qb = $this->createQueryBuilder('c');
+        // if(1 = 1) {
+        //     $qb-> ....
+        // }
 
        return $this->createQueryBuilder('c')
            ->setMaxResults($filters->getPageSize())

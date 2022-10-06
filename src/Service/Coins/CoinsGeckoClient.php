@@ -26,6 +26,7 @@ class CoinsGeckoClient
         $this->client = $coingeckoApiClient;
     }
 
+    //TODO: move str to .env
     /**
      * @return array
      */

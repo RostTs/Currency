@@ -8,6 +8,7 @@ use App\Service\Coins\CoinsCreateService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+// TODO: change name to update command
 /**
  * Class SaveCoinsCommand
  */

@@ -40,7 +40,11 @@ class CoinsCreateService
         $this->em = $em;
     }
 
-    public function create(OutputInterface $output): void
+
+        //TODO: create factory
+        //TODO: if(!$output)
+        //TODO: findBy change to chunks 50/100
+    public function create(?OutputInterface $output): void
     {
         $coins = $this->coinsGeckoClient->getAll();
 

@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name:"coins")]
 class Coin
 {
+    //TODO: Concert annotations
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
