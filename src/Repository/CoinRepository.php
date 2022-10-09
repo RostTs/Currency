@@ -40,35 +40,21 @@ class CoinRepository extends ServiceEntityRepository
         }
     }
 
-    //TODO: rename
    /**
     * @return Coin[]
     */
-   public function findByExampleField(CoinsFilters $filters): array
+   public function findByFilters(CoinsFilters $filters): array
    {
         $offset = ($filters->getPage() > 1) ? $filters->getPage() * $filters->getPageSize() : 0;
-
+        $qb = $this->createQueryBuilder('c');
         if($filters->getIsFavorite()) {
-            return $this->createQueryBuilder('c')
-            ->andWhere('c.isFavorite = :isFavorite')
-            ->setParameter('isFavorite', $filters->getIsFavorite())
-            ->setMaxResults($filters->getPageSize())
-            ->setFirstResult($offset)
-            ->getQuery()
-            ->getResult();
+            $qb->andWhere('c.isFavorite = :isFavorite')
+            ->setParameter('isFavorite', $filters->getIsFavorite());
         }
+        return $qb->setMaxResults($filters->getPageSize())
+        ->setFirstResult($offset)
+        ->getQuery()
+        ->getResult();
 
-    //TODO: rebuild qb
-
-        // $qb = $this->createQueryBuilder('c');
-        // if(1 = 1) {
-        //     $qb-> ....
-        // }
-
-       return $this->createQueryBuilder('c')
-           ->setMaxResults($filters->getPageSize())
-           ->setFirstResult($offset)
-           ->getQuery()
-           ->getResult();
-   }
+    }
 }

@@ -8,27 +8,23 @@ use App\Service\Coins\CoinsCreateService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-// TODO: change name to update command
 /**
  * Class SaveCoinsCommand
  */
 #[AsCommand(
-    name: 'coins:save',
+    name: 'coins:update',
     description:'Saves coins list to DB'
 )]
-class SaveCoinsCommand extends Command
+class UpdateCoinsCommand extends Command
 {
-
-    /** @var $coinsCreateService */
-    private $coinsCreateService;
-
     /**
      * @param CoinsCreateService $coinsCreateService
      */
-    public function __construct(CoinsCreateService $coinsCreateService)
+    public function __construct(
+        private CoinsCreateService $coinsCreateService
+        )
     {
         parent::__construct();
-        $this->coinsCreateService = $coinsCreateService;
     }
 
     protected function configure()
