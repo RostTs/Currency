@@ -45,7 +45,7 @@ class CoinRepository extends ServiceEntityRepository
     */
    public function findByFilters(CoinsFilters $filters): array
    {
-        $offset = ($filters->getPage() > 1) ? $filters->getPage() * $filters->getPageSize() : 0;
+        $offset = $filters->getOffset();
         $qb = $this->createQueryBuilder('c');
         if($filters->getIsFavorite()) {
             $qb->andWhere('c.isFavorite = :isFavorite')

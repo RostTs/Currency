@@ -47,14 +47,12 @@ class CoinsFilters {
         return $this->pageSize;
     }
 
-    //TODO: make get offet methid
-
-       /**
+    /**
      * @return int
      */
-    // public function make..(): int
-    // {
-    //     return $this->pageSize;
-    // }
+    public function getOffset(): int
+    {
+        return ($this->page > 1) ? $this->page * $this->pageSize : 0;
+    }
 
 }
