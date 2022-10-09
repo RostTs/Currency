@@ -18,13 +18,9 @@ class CoinsFilters {
     */
     public function __construct(array $params)
     {
-        if (array_key_exists('isFavorite',$params)) {
-            $this->isFavorite = $params['isFavorite'];
-        }
         $this->isFavorite = ($params['isFavorite'])??  false;
-        // $this->isFavorite = (isset($params['isFavorite']))? $params['isFavorite'] : $this->isFavorite;
-        $this->page = (isset($params['page']))? $params['page'] : $this->page;
-        $this->pageSize = (isset($params['pageSize']))? $params['pageSize'] : $this->pageSize;
+        $this->page = ($params['page'])??  false;
+        $this->pageSize = ($params['pageSize'])??  false;
     }
     
     /**

@@ -9,62 +9,50 @@ use App\Entity\Coin;
 use DateTime;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Factory\Coins\CoinFactory;
 
 /**
  * Class CoinsCreateService
  */
 class CoinsCreateService 
 {
-    /** @var CoinsGeckoClient */
-    private $coinsGeckoClient;
-
-    /** @var CoinRepository */
-    private $coinRepository;
-
-    /** @var EntityManagerInterface */
-    private $em;
-
     /**
      * @param CoinsGeckoClient $coinsGeckoClient
      * @param CoinRepository $coinRepository
      * @param EntityManagerInterface $em
+     * @param CoinFactory $coinFactory
      */
     public function __construct(
-        CoinsGeckoClient $coinsGeckoClient,
-        CoinRepository $coinRepository,
-        EntityManagerInterface $em
-        )
-    {
-        $this->coinsGeckoClient = $coinsGeckoClient;
-        $this->coinRepository = $coinRepository;
-        $this->em = $em;
-    }
+        private CoinsGeckoClient $coinsGeckoClient,
+        private CoinRepository $coinRepository,
+        private EntityManagerInterface $em,
+        private CoinFactory $coinFactory
+        ) {}
 
 
-        //TODO: create factory
-        //TODO: if(!$output)
         //TODO: findBy change to chunks 50/100
     public function create(?OutputInterface $output): void
     {
         $coins = $this->coinsGeckoClient->getAll();
 
-        $progressBar = new ProgressBar($output, count($coins));
+        $progressBar = $output ? new ProgressBar($output, count($coins)) : null;
 
-        $progressBar->start();
+        $output ? $progressBar->start() : null;
+
         foreach($coins as $singleCoin){
             if(!$this->coinRepository->findBy(['coingeckoId' => $singleCoin->id])){
-                $coin = new Coin();
-                $coin->setCoingeckoId($singleCoin->id);
-                $coin->setSymbol($singleCoin->symbol);
-                $coin->setName($singleCoin->name);
-                $coin->setIsFavorite(false);
-                $coin->setCreated(new DateTime());
-
+                $coin = $this->coinFactory->createFromArray([
+                    'coinGeckoId' => $singleCoin->id,
+                    'symbol' => $singleCoin->symbol,
+                    'name' => $singleCoin->name,
+                    'isFavorite' => false,
+                    'created' => new DateTime()
+                ]);
                 $this->em->persist($coin);
             }
-            $progressBar->advance();
+                $output ? $progressBar->advance() : null;
         }
-        $progressBar->finish();
+            $output ? $progressBar->finish() : null;
 
         $this->em->flush();
     }
