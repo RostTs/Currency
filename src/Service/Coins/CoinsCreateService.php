@@ -9,7 +9,7 @@ use App\Entity\Coin;
 use DateTime;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Factory\Coins\CoinFactory;
+use App\Factory\CoinFactory;
 
 /**
  * Class CoinsCreateService

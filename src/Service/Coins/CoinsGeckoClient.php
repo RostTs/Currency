@@ -4,35 +4,30 @@ namespace App\Service\Coins;
 
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * Class CoinsGeckoClient
  */
 class CoinsGeckoClient 
 {
-    /** @var FilesystemAdapter */
-    private $adapter;
-
-    /** @var HttpClientInterface */
-    private $client;
-
     /**
      * @param FilesystemAdapter $adapter
      * @param HttpClientInterface $client
+     * @param ParameterBagInterface $parameterBag
      */
-    public function __construct(FilesystemAdapter $adapter,HttpClientInterface $coingeckoApiClient)
-    {
-        $this->adapter = $adapter;
-        $this->client = $coingeckoApiClient;
-    }
+    public function __construct(
+        private FilesystemAdapter $adapter,
+        private HttpClientInterface $coingeckoApiClient,
+        private ParameterBagInterface $parameterBag
+        ) {}
 
-    //TODO: move str to .env
     /**
      * @return array
      */
     public function getAll():array
     {
-        $path = '/api/v3/coins/list';
+        $path = $this->parameterBag->get('coingecko.list');
         $coinsJson = $this->client->request('GET',$path)->getContent();
         
         return json_decode($coinsJson);

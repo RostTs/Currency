@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Factory\Coins;
+namespace App\Factory;
 
 use App\Entity\Coin;
 use DateTime;
