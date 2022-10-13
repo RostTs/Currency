@@ -39,6 +39,25 @@ class CoinsCreateService
 
         $output ? $progressBar->start() : null;
 
+// $chunks = array_chunk($coins,50); 
+        // TODO: array_column instead of array_map
+        // TODO: qb set params ids with array instead of str
+        // foreach ($chunks as $chunk) {
+        //     $ids = array_map(function($coin) {
+        //         return $coin->id;
+        //     }, $chunk);
+        //     $idsStr = implode(", ",$ids); // "1,2,3,4,5,6,7..."
+
+        //     $result =  SELECT coingeckoId FROM coins WHERE coingeckoId in (ids) 
+        //     $result = [1,2,5]
+
+        //     foreach($chunk as $coin){
+        //     if(!array_key_exists($result,$coin->id)){
+        //          insert()  
+        //     }
+        //     }
+        // }
+
         foreach($coins as $singleCoin){
             if(!$this->coinRepository->findBy(['coingeckoId' => $singleCoin->id])){
                 $coin = $this->coinFactory->createFromArray([

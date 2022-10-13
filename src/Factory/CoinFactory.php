@@ -21,6 +21,7 @@ class CoinFactory {
             'isFavorite' => 0,
             'created' => new DateTime()
         ];
+        // TODO: set only non defaul params
         $params = array_merge($template, $params);
 
         $coin = new Coin();

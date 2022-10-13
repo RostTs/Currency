@@ -32,7 +32,7 @@ class CoinsController extends AbstractController
     );
     }
 
-        /**
+    /**
      * @Route("/coin/{coin}", name="list",methods="PATCH")
      * 
      * @param Coin $coin
