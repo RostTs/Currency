@@ -41,6 +41,8 @@ class CoinRepository extends ServiceEntityRepository
     }
 
    /**
+    * @param CoinsFilters $filters
+    *
     * @return Coin[]
     */
    public function findByFilters(CoinsFilters $filters): array
@@ -55,6 +57,20 @@ class CoinRepository extends ServiceEntityRepository
         ->setFirstResult($offset)
         ->getQuery()
         ->getResult();
+    }
 
+    /**
+     * @param int[] $coins
+     * 
+     * @return int[]
+     */
+   public function getExistingByIds(array $coins): array
+   {
+        return $this->createQueryBuilder('c')
+            ->select('coingeckoId')
+            ->andWhere('c.coingeckoId = :coins')
+            ->setParameter('coins', $coins)
+            ->getQuery()
+            ->getResult();
     }
 }

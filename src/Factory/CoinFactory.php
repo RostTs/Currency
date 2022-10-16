@@ -15,13 +15,9 @@ class CoinFactory {
     public function createFromArray(array $params = []): Coin
     {
         $template = [
-            'coinGeckoId' => 0,
-            'symbol' => null,
-            'name' => null,
             'isFavorite' => 0,
             'created' => new DateTime()
         ];
-        // TODO: set only non defaul params
         $params = array_merge($template, $params);
 
         $coin = new Coin();
