@@ -33,7 +33,7 @@ class CoinsController extends AbstractController
     }
 
     /**
-     * @Route("/coin/{coin}", name="list",methods="PATCH")
+     * @Route("/coin/{coin}", name="updateCoin",methods="PATCH")
      * 
      * @param Coin $coin
      * @param Request $request
@@ -41,7 +41,7 @@ class CoinsController extends AbstractController
      */
     public function update(Coin $coin, Request $request,CoinsUpdateService $coinsUpdateService): Response
     {
-        $params = new CoinsParams($request->query->all());
+        $params = new CoinsParams(json_decode($request->getContent(), true));
         $coinsUpdateService->update($params,$coin);
         return $this->json(
             $coin, 

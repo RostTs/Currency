@@ -18,7 +18,7 @@ class CoinsGeckoClient
      */
     public function __construct(
         private FilesystemAdapter $adapter,
-        private HttpClientInterface $coingeckoApiClient,
+        private HttpClientInterface $client,
         private ParameterBagInterface $parameterBag
         ) {}
 
