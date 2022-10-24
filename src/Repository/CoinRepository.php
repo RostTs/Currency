@@ -66,11 +66,14 @@ class CoinRepository extends ServiceEntityRepository
      */
    public function getExistingByIds(array $coins): array
    {
-        return $this->createQueryBuilder('c')
-            ->select('coingeckoId')
-            ->andWhere('c.coingeckoId = :coins')
+        $result = $this->createQueryBuilder('c')
+            ->select('c.coingeckoId')
+            ->where('c.coingeckoId in (:coins)')
             ->setParameter('coins', $coins)
             ->getQuery()
             ->getResult();
+
+            return array_column($result,'coingeckoId');
+            
     }
 }

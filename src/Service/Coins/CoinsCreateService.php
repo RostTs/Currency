@@ -16,7 +16,9 @@ use App\Factory\CoinFactory;
  */
 class CoinsCreateService 
 {
-    private const COINS_PER_CHUNK = 50;
+    private const COINS_PER_CHUNK = 200;
+    private const CURRENCY = 'usd';
+    private const SECONDS_TO_SLEEP = 7;
     /**
      * @param CoinsGeckoClient $coinsGeckoClient
      * @param CoinRepository $coinRepository
@@ -37,18 +39,26 @@ class CoinsCreateService
         $output ? $progressBar->start() : null;
 
         $chunks = array_chunk($coins,self::COINS_PER_CHUNK); 
-        
+
         foreach ($chunks as $chunk) {
             $ids = array_column($chunk,'id');
+            
+            $idsString = implode(",", $ids);
+            $prices = $this->coinsGeckoClient->getPrices($idsString,self::CURRENCY);
+            sleep(self::SECONDS_TO_SLEEP);
             $result = $this->coinRepository->getExistingByIds($ids);
+
             foreach($chunk as $singleCoin){
-                if(!array_key_exists($result,$singleCoin->id)){
+            
+                if(!in_array($singleCoin->id,$result)){
                     $coin = $this->coinFactory->createFromArray([
                         'coinGeckoId' => $singleCoin->id,
                         'symbol' => $singleCoin->symbol,
                         'name' => $singleCoin->name,
-                        'isFavorite' => false
+                        'isFavorite' => false,
+                        'price' => ($prices[$singleCoin->id][self::CURRENCY]) ?? null
                     ]);
+                   
                     $this->em->persist($coin);
                 }
                 $output ? $progressBar->advance() : null;

@@ -37,6 +37,18 @@ class Coin
     #[Groups(['list'])]
     private ?\DateTimeInterface $created = null;
 
+    #[ORM\Column()]
+    #[Groups(['list'])]
+    private ?float $price = null;
+
+    #[ORM\Column()]
+    #[Groups(['list'])]
+    private ?string $image = null;
+
+    #[ORM\Column()]
+    #[Groups(['list'])]
+    private ?\DateTimeInterface $priceUpdated = null;
+
     
 
     public function getId(): ?int
@@ -101,6 +113,33 @@ class Coin
     {
         $this->isFavorite = $isFavorite;
 
+        return $this;
+    }
+
+    public function getPrice (): ?float {
+        return $this->price;
+    }
+
+    public function setPrice (?float $price): self {
+        $this->price = $price;
+        return $this;
+    }
+
+    public function getImage (): ?string {
+        return $this->image;
+    }
+
+    public function setImage (?string $imagePath): self {
+        $this->image = $imagePath;
+        return $this;
+    }
+
+    public function getPriceUpdated (): ?\DateTimeInterface {
+        return $this->priceUpdated;
+    }
+
+    public function setPriceUpdated (?\DateTimeInterface $priceUpdated): self {
+        $this->priceUpdated = $priceUpdated;
         return $this;
     }
 }

@@ -16,16 +16,21 @@ class CoinFactory {
     {
         $template = [
             'isFavorite' => 0,
+            'price' => null,
+            'image' => null,
+            'priceUpdated' => new DateTime(),
             'created' => new DateTime()
         ];
         $params = array_merge($template, $params);
-
         $coin = new Coin();
-        $coin->setCoingeckoId($template['coinGeckoId'])
-             ->setSymbol($template['symbol'])
-             ->setName($template['name'])
-             ->setIsFavorite($template['isFavorite'])
-             ->setCreated($template['created']);
+        $coin->setCoingeckoId($params['coinGeckoId'])
+             ->setSymbol($params['symbol'])
+             ->setName($params['name'])
+             ->setIsFavorite($params['isFavorite'])
+             ->setPrice($params['price'])
+             ->setImage($params['image'])
+             ->setPriceUpdated($params['priceUpdated'])
+             ->setCreated($params['created']);
 
         return $coin;
     }
