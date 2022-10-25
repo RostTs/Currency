@@ -12,22 +12,19 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class SaveCoinsCommand
  */
 #[AsCommand(
-    name: 'coins:save',
+    name: 'coins:update',
     description:'Saves coins list to DB'
 )]
-class SaveCoinsCommand extends Command
+class UpdateCoinsCommand extends Command
 {
-
-    /** @var $coinsCreateService */
-    private $coinsCreateService;
-
     /**
      * @param CoinsCreateService $coinsCreateService
      */
-    public function __construct(CoinsCreateService $coinsCreateService)
+    public function __construct(
+        private CoinsCreateService $coinsCreateService
+        )
     {
         parent::__construct();
-        $this->coinsCreateService = $coinsCreateService;
     }
 
     protected function configure()
@@ -39,7 +36,7 @@ class SaveCoinsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->coinsCreateService->create();
+        $this->coinsCreateService->create($output);
 
         return Command::SUCCESS;
     }

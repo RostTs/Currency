@@ -3,57 +3,58 @@
 namespace App\Service\Coins;
 
 use App\Repository\CoinRepository;
-use App\Service\Coins\CoinsParseService;
+use App\Service\Coins\CoinsGeckoClient;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Coin;
 use DateTime;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
+use App\Factory\CoinFactory;
 
 /**
  * Class CoinsCreateService
  */
 class CoinsCreateService 
 {
-    /** @var CoinsParseService */
-    private $coinsParseService;
-
-    /** @var CoinRepository */
-    private $coinRepository;
-
-    /** @var EntityManagerInterface */
-    private $em;
-
+    private const COINS_PER_CHUNK = 50;
     /**
-     * @param CoinsParseService $coinsParseService
+     * @param CoinsGeckoClient $coinsGeckoClient
      * @param CoinRepository $coinRepository
      * @param EntityManagerInterface $em
+     * @param CoinFactory $coinFactory
      */
     public function __construct(
-        CoinsParseService $coinsParseService,
-        CoinRepository $coinRepository,
-        EntityManagerInterface $em
-        )
+        private CoinsGeckoClient $coinsGeckoClient,
+        private CoinRepository $coinRepository,
+        private EntityManagerInterface $em,
+        private CoinFactory $coinFactory
+        ) {}
+
+    public function create(?OutputInterface $output): void
     {
-        $this->coinsParseService = $coinsParseService;
-        $this->coinRepository = $coinRepository;
-        $this->em = $em;
-    }
+        $coins = $this->coinsGeckoClient->getAll();
+        $progressBar = $output ? new ProgressBar($output, count($coins)) : null;
+        $output ? $progressBar->start() : null;
 
-    public function create(): void
-    {
-        $parsedCoins = $this->coinsParseService->parseAll();
-
-        foreach($parsedCoins as $parsedCoin){
-            if(!$this->coinRepository->findOneBy(['coingeckoId' => $parsedCoin->id])){
-                $coin = new Coin();
-                $coin->setCoingeckoId($parsedCoin->id);
-                $coin->setSymbol($parsedCoin->symbol);
-                $coin->setName($parsedCoin->name);
-                $coin->setIsFavorite(false);
-                $coin->setCreated(new DateTime());
-
-                $this->em->persist($coin);
-                $this->em->flush();
+        $chunks = array_chunk($coins,self::COINS_PER_CHUNK); 
+        
+        foreach ($chunks as $chunk) {
+            $ids = array_column($chunk,'id');
+            $result = $this->coinRepository->getExistingByIds($ids);
+            foreach($chunk as $singleCoin){
+                if(!array_key_exists($result,$singleCoin->id)){
+                    $coin = $this->coinFactory->createFromArray([
+                        'coinGeckoId' => $singleCoin->id,
+                        'symbol' => $singleCoin->symbol,
+                        'name' => $singleCoin->name,
+                        'isFavorite' => false
+                    ]);
+                    $this->em->persist($coin);
+                }
+                $output ? $progressBar->advance() : null;
             }
         }
+        $output ? $progressBar->finish() : null;
+        $this->em->flush();
     }
 }
