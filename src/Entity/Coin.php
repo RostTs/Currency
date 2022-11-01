@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CoinRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -11,7 +13,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name:"coins")]
 class Coin
 {
-    //TODO: Concert annotations
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -48,6 +49,14 @@ class Coin
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['list'])]
     private ?\DateTimeInterface $priceUpdated = null;
+
+    #[ORM\OneToMany(mappedBy: 'coinId', targetEntity: CoinArchive::class, orphanRemoval: true)]
+    private Collection $archivedPrice;
+
+    public function __construct()
+    {
+        $this->archivedPrice = new ArrayCollection();
+    }
 
     
 
@@ -140,6 +149,36 @@ class Coin
 
     public function setPriceUpdated (?\DateTimeInterface $priceUpdated): self {
         $this->priceUpdated = $priceUpdated;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CoinArchive>
+     */
+    public function getArchivedPrice(): Collection
+    {
+        return $this->archivedPrice;
+    }
+
+    public function addArchivedPrice(CoinArchive $archivedPrice): self
+    {
+        if (!$this->archivedPrice->contains($archivedPrice)) {
+            $this->archivedPrice->add($archivedPrice);
+            $archivedPrice->setCoinId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArchivedPrice(CoinArchive $archivedPrice): self
+    {
+        if ($this->archivedPrice->removeElement($archivedPrice)) {
+            // set the owning side to null (unless already changed)
+            if ($archivedPrice->getCoinId() === $this) {
+                $archivedPrice->setCoinId(null);
+            }
+        }
+
         return $this;
     }
 }
