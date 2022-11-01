@@ -2,15 +2,20 @@
 
 namespace App\Service\Coins;
 
+use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-
+use Symfony\Component\HttpClient\Exception\ClientException;
 /**
  * Class CoinsGeckoClient
  */
 class CoinsGeckoClient 
 {
+    private const SECONDS_TO_SLEEP = 7;
+    private const COINS_PER_CHUNK = 200;
+    private const SUCCESS_STATUS = 200;
+
     /**
      * @param FilesystemAdapter $adapter
      * @param HttpClientInterface $coingeckoApiClient
@@ -34,17 +39,37 @@ class CoinsGeckoClient
     }
 
     /**
-     * @param string $ids
+     * @param array $ids
      * @param string $currency
      * 
      * @return array
      */
-    public function getPrices(string $ids,string $currency): array
+    public function getPrices(array $ids, string $currency): array
     {
-        $path = $this->parameterBag->get('coingecko.price');
-        $params = '?ids=' . $ids . '&vs_currencies=' . $currency;
+        $coins = [];
+        $chunks = array_chunk($ids,self::COINS_PER_CHUNK);
+        foreach ($chunks as $chunk) {
+            $chunkCoins = $this->processChunk($chunk, $currency);
+            $coins = array_merge($coins, $chunkCoins);
+    
+        }
+        return $coins;
+    }
 
-        $coinsJson = $this->coingeckoApiClient->request('GET',$path . $params)->getContent();
-        return json_decode($coinsJson,1);
+    private function processChunk(array $chunk,string $currency,bool $wait = false): array {
+        
+        if($wait){
+            sleep(self::SECONDS_TO_SLEEP);
+        }
+        $idsString = implode(",", $chunk);
+        $path = $this->parameterBag->get('coingecko.price');
+        $params = '?ids=' . $idsString . '&vs_currencies=' . $currency;
+        $coins = $this->coingeckoApiClient->request('GET',$path . $params);
+
+        if($coins->getStatusCode() !== self::SUCCESS_STATUS){
+            return $this->processChunk($chunk,$currency,true);
+        } else {
+            return json_decode($coins->getContent(),true);
+        }
     }
 }

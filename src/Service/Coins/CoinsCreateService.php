@@ -18,7 +18,7 @@ class CoinsCreateService
 {
     private const COINS_PER_CHUNK = 200;
     private const CURRENCY = 'usd';
-    private const SECONDS_TO_SLEEP = 7;
+
     /**
      * @param CoinsGeckoClient $coinsGeckoClient
      * @param CoinRepository $coinRepository
@@ -32,21 +32,20 @@ class CoinsCreateService
         private CoinFactory $coinFactory
         ) {}
 
-    public function create(?OutputInterface $output): void
+    public function create(?OutputInterface $output)
     {
         $coins = $this->coinsGeckoClient->getAll();
         $progressBar = $output ? new ProgressBar($output, count($coins)) : null;
+        $ids = array_column($coins,'id');
         $output ? $progressBar->start() : null;
 
+        $prices = $this->coinsGeckoClient->getPrices($ids,self::CURRENCY);
         $chunks = array_chunk($coins,self::COINS_PER_CHUNK); 
 
         foreach ($chunks as $chunk) {
-            $ids = array_column($chunk,'id');
+            $chunkIds = array_column($chunk,'id');
             
-            $idsString = implode(",", $ids);
-            $prices = $this->coinsGeckoClient->getPrices($idsString,self::CURRENCY);
-            sleep(self::SECONDS_TO_SLEEP);
-            $result = $this->coinRepository->getExistingByIds($ids);
+            $result = $this->coinRepository->getByCoingeckoIds($chunkIds);
 
             foreach($chunk as $singleCoin){
             
@@ -58,13 +57,14 @@ class CoinsCreateService
                         'isFavorite' => false,
                         'price' => ($prices[$singleCoin->id][self::CURRENCY]) ?? null
                     ]);
-                   
                     $this->em->persist($coin);
                 }
                 $output ? $progressBar->advance() : null;
             }
         }
-        $output ? $progressBar->finish() : null;
         $this->em->flush();
+
+        $output ? $progressBar->finish() : null;
+
     }
 }

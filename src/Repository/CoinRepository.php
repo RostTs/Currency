@@ -64,7 +64,7 @@ class CoinRepository extends ServiceEntityRepository
      * 
      * @return int[]
      */
-   public function getExistingByIds(array $coins): array
+   public function getByCoingeckoIds(array $coins): array
    {
         $result = $this->createQueryBuilder('c')
             ->select('c.coingeckoId')

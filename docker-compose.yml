@@ -28,12 +28,12 @@ services:
       # POSTGRES_HOST_AUTH_METHOD: "trust"
       POSTGRES_USER: ${POSTGRES_USER:-root}
     volumes:
-      - db-data:/var/lib/postgresql/data:rw
+      - ./db-data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
-volumes:
+# volumes:
 ###> doctrine/doctrine-bundle ###
-  db-data:
+  # db-data:
 ###< doctrine/doctrine-bundle ###

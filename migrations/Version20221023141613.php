@@ -21,13 +21,15 @@ final class Version20221023141613 extends AbstractMigration
     {
         $this->addSql("ALTER TABLE coins
         ADD image VARCHAR(255),
-        ADD price NUMERIC (11,2),
+        ADD price NUMERIC (20,2),
         ADD price_updated date");
     }
 
     public function down(Schema $schema): void
     {
         $this->addSql("ALTER TABLE coins
-        DROP image, price, price_updated");
+        DROP COLUMN image, 
+        DROP COLUMN price, 
+        DROP COLUMN price_updated");
     }
 }

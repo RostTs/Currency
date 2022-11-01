@@ -45,7 +45,7 @@ class Coin
     #[Groups(['list'])]
     private ?string $image = null;
 
-    #[ORM\Column()]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['list'])]
     private ?\DateTimeInterface $priceUpdated = null;
 
