@@ -55,7 +55,7 @@ class CoinsCreateService
                         'symbol' => $singleCoin->symbol,
                         'name' => $singleCoin->name,
                         'isFavorite' => false,
-                        'price' => ($prices[$singleCoin->id][self::CURRENCY]) ?? null
+                        'price' => ($prices[$singleCoin->id][self::CURRENCY]) ?? 0
                     ]);
                     $this->em->persist($coin);
                 }

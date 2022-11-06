@@ -42,7 +42,7 @@ class Coin
     #[Groups(['list'])]
     private ?float $price = null;
 
-    #[ORM\Column()]
+    #[ORM\Column(nullable:true)]
     #[Groups(['list'])]
     private ?string $image = null;
 

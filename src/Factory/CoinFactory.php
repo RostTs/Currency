@@ -15,8 +15,8 @@ class CoinFactory {
     public function createFromArray(array $params = []): Coin
     {
         $template = [
-            'isFavorite' => 0,
-            'price' => null,
+            'isFavorite' => false,
+            'price' => 0,
             'image' => null,
             'priceUpdated' => (isset($params['price'])) ? new DateTime() : null,
             'created' => new DateTime()
