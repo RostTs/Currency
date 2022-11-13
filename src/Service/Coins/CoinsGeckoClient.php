@@ -3,10 +3,8 @@
 namespace App\Service\Coins;
 
 use Exception;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpClient\Exception\ClientException;
 /**
  * Class CoinsGeckoClient
  */
@@ -17,12 +15,10 @@ class CoinsGeckoClient
     private const SUCCESS_STATUS = 200;
 
     /**
-     * @param FilesystemAdapter $adapter
      * @param HttpClientInterface $coingeckoApiClient
      * @param ParameterBagInterface $parameterBag
      */
     public function __construct(
-        private FilesystemAdapter $adapter,
         private HttpClientInterface $coingeckoApiClient,
         private ParameterBagInterface $parameterBag
         ) {}
@@ -33,7 +29,7 @@ class CoinsGeckoClient
     public function getAll():array
     {
         $path = $this->parameterBag->get('coingecko.list');
-       
+        
         $coinsJson = $this->coingeckoApiClient->request('GET',$path)->getContent();
         return json_decode($coinsJson);
     }

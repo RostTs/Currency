@@ -3,19 +3,28 @@
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Service\Coins\CoinsGeckoClient;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class CoinsGeckoClientTest extends TestCase {
 
-    private HttpClientInterface $httpClient;
+    private ParameterBagInterface|MockObject $parameterBag;
+    private CoinsGeckoClient $coinsGeckoClient;
 
     private const TOTAL_COINS_PATH = 'https://api.coingecko.com/api/v3/coins/list';
     private const COINS_PRICE_PATH = 'https://api.coingecko.com/api/v3/simple/price';
-    private const COINS_PER_CHUNK = 1;
     private const CURRENCY = 'usd';
-    private const SECONDS_TO_SLEEP = 7;
-    private const SUCCESS_STATUS = 200;
+
+    private const LIST_EXPECTED_RESPONSE= [
+        ['id' => '01coin','symbol' => 'zoc','name' => '01coin'],
+        ['id' => '0-5x-long-algorand-token','symbol' => 'algohalf','name' => '0.5X Long Algorand'],
+        ['id' => '0-5x-long-altcoin-index-token','symbol' => 'althalf','name' => '0.5X Long Altcoin Index'],
+    ];
+        
     private const COINS_IDS = [
         '01coin',
         '0-5x-long-algorand-token',
@@ -24,51 +33,58 @@ final class CoinsGeckoClientTest extends TestCase {
         '0-5x-long-bitcoin-cash-token'
     ];
 
+    private const PRICES_EXPECTED_RESPONSE = [
+        '01coin' => [self::CURRENCY => 0.0002356],
+        '0-5x-long-algorand-token' => [self::CURRENCY => 9427.01],
+        '0-5x-long-altcoin-index-token' => [self::CURRENCY => 15308.0],
+        '0-5x-long-ascendex-token-token' => [self::CURRENCY => 5513.0],
+        '0-5x-long-bitcoin-cash-token' => [self::CURRENCY => 11490.64]
+    ];
+
     public function setUp(): void
     {
-        $httpClient = new HttpClient();
-        $this->httpClient = $httpClient->create();
+        $this->httpClient = $this->createMock(MockHttpClient::class);
+        $this->parameterBag = $this->createMock(ParameterBag::class);
     }
 
     public function testGetAll()
     {
-        $httpClient = new HttpClient();
-        $coinsJson = $this->httpClient->request('GET',self::TOTAL_COINS_PATH)->getContent();
+        $this->createCoinsGecko(self::LIST_EXPECTED_RESPONSE);
 
-        // Test if coinsJson is an array
-        $this->assertIsArray(json_decode($coinsJson));
+        $this->parameterBag
+        ->expects($this->once())
+        ->method('get')
+        ->with('coingecko.list')
+        ->willReturn(self::TOTAL_COINS_PATH);
+
+        $coins = $this->coinsGeckoClient->getAll();
+        $this->assertEquals(json_decode(json_encode(self::LIST_EXPECTED_RESPONSE)), $coins);
     }
 
     public function testGetPrices()
     {
-        $coins = [];
-        $chunks = array_chunk(self::COINS_IDS,self::COINS_PER_CHUNK);
-        foreach ($chunks as $chunk) {
-            $chunkCoins = $this->processChunk($chunk);
+        $this->createCoinsGecko(self::PRICES_EXPECTED_RESPONSE);
 
-            // Test if currency[usd] is float
-            $this->assertIsFloat($chunkCoins[$chunk[0]][self::CURRENCY]);
+        $this->parameterBag
+        ->expects($this->once())
+        ->method('get')
+        ->with('coingecko.price')
+        ->willReturn(self::COINS_PRICE_PATH);
 
-            $coins = array_merge($coins, $chunkCoins);
+        $coins = $this->coinsGeckoClient->getPrices(self::COINS_IDS, self::CURRENCY);
+        foreach (self::COINS_IDS as $coinId) {
+            $this->assertEquals(
+                 self::PRICES_EXPECTED_RESPONSE[$coinId][self::CURRENCY],
+                 $coins[$coinId][self::CURRENCY]
+                );
         }
-        // Test if coins is not empty array
-        $this->assertIsArray($coins);
-        $this->assertNotEmpty($coins);
     }
 
-    private function processChunk(array $chunk,bool $wait = false): array {
-        if($wait){
-            sleep(self::SECONDS_TO_SLEEP);
-        }
-        $idsString = implode(",", $chunk);
-
-        $params = '?ids=' . $idsString . '&vs_currencies=' . self::CURRENCY;
-        $coins = $this->httpClient->request('GET',self::COINS_PRICE_PATH . $params);
-
-        if($coins->getStatusCode() !== self::SUCCESS_STATUS){
-            return $this->processChunk($chunk,true);
-        } else {
-            return json_decode($coins->getContent(),true);
-        }
+    private function createCoinsGecko(array $mockResponse) {
+        $mockResp = new MockResponse(json_encode($mockResponse));
+        $this->coinsGeckoClient = new CoinsGeckoClient(
+            new MockHttpClient([$mockResp]),
+            $this->parameterBag
+        );
     }
 }
