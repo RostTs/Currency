@@ -58,6 +58,7 @@ final class CoinsGeckoClientTest extends TestCase {
         ->willReturn(self::TOTAL_COINS_PATH);
 
         $coins = $this->coinsGeckoClient->getAll();
+        // set json_encode and json_decode in order to convert each element of LIST_EXPECTED_RESPONSE to std object
         $this->assertEquals(json_decode(json_encode(self::LIST_EXPECTED_RESPONSE)), $coins);
     }
 
@@ -72,12 +73,7 @@ final class CoinsGeckoClientTest extends TestCase {
         ->willReturn(self::COINS_PRICE_PATH);
 
         $coins = $this->coinsGeckoClient->getPrices(self::COINS_IDS, self::CURRENCY);
-        foreach (self::COINS_IDS as $coinId) {
-            $this->assertEquals(
-                 self::PRICES_EXPECTED_RESPONSE[$coinId][self::CURRENCY],
-                 $coins[$coinId][self::CURRENCY]
-                );
-        }
+        $this->assertEquals(self::PRICES_EXPECTED_RESPONSE, $coins);
     }
 
     private function createCoinsGecko(array $mockResponse) {
