@@ -5,8 +5,6 @@ namespace App\Service\Coins;
 use App\Repository\CoinRepository;
 use App\Service\Coins\CoinsGeckoClient;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Coin;
-use DateTime;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Factory\CoinFactory;

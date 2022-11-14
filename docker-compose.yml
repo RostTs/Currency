@@ -27,6 +27,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       # POSTGRES_HOST_AUTH_METHOD: "trust"
       POSTGRES_USER: ${POSTGRES_USER:-root}
+      PGDATA: /var/lib/postgresql/data/secondary_folder/
     volumes:
       - ./db-data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
