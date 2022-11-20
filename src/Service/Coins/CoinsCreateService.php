@@ -65,4 +65,26 @@ class CoinsCreateService
         $output ? $progressBar->finish() : null;
 
     }
+
+    public function createForList(?OutputInterface $output, array $list) 
+    {
+        $progressBar = $output ? new ProgressBar($output, count($list)) : null;
+        $output ? $progressBar->start() : null;
+            foreach($list as $coin) {
+                $coinData = $this->coinsGeckoClient->getSingle($coin);
+                $coin = $this->coinFactory->createFromArray([
+                    'coinGeckoId' => $coinData['id'],
+                    'symbol' => $coinData['symbol'],
+                    'name' => $coinData['name'],
+                    'isFavorite' => false,
+                    'image' => $coinData['image']['thumb'],
+                    'price' => $coinData['market_data']['current_price'][self::CURRENCY]
+                ]);
+                $this->em->persist($coin);
+                $output ? $progressBar->advance() : null;
+            }
+        $this->em->flush();
+        $output ? $progressBar->finish() : null;
+
+    }
 }

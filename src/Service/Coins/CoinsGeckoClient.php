@@ -39,6 +39,18 @@ class CoinsGeckoClient
     }
 
     /**
+     * @param string $coinId
+     * 
+     * @return array
+     */
+    public function getSingle(string $coinId):array
+    {
+        $path = $this->parameterBag->get('coingecko.single') . '/' . $coinId;
+        $coinData = $this->coingeckoApiClient->request('GET',$path)->getContent();
+        return json_decode($coinData,1);
+    }
+
+    /**
      * @param array $ids
      * @param string $currency
      * 
