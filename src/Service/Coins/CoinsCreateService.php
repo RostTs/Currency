@@ -46,17 +46,21 @@ class CoinsCreateService
             $result = $this->coinRepository->getByCoingeckoIds($chunkIds);
 
             foreach($chunk as $singleCoin){
-            
+                $coinPrice = ($prices[$singleCoin->id][self::CURRENCY]) ?? 0;
                 if(!in_array($singleCoin->id,$result)){
                     $coin = $this->coinFactory->createFromArray([
                         'coinGeckoId' => $singleCoin->id,
                         'symbol' => $singleCoin->symbol,
                         'name' => $singleCoin->name,
                         'isFavorite' => false,
-                        'price' => ($prices[$singleCoin->id][self::CURRENCY]) ?? 0
+                        'price' => $coinPrice
                     ]);
-                    $this->em->persist($coin);
+                } else {
+                    $coin = $this->coinRepository->getByCoingeckoId($singleCoin->id);
+                    $coin->setPrice($coinPrice);
                 }
+                $this->em->persist($coin);
+
                 $output ? $progressBar->advance() : null;
             }
         }
@@ -72,14 +76,19 @@ class CoinsCreateService
         $output ? $progressBar->start() : null;
             foreach($list as $coin) {
                 $coinData = $this->coinsGeckoClient->getSingle($coin);
-                $coin = $this->coinFactory->createFromArray([
-                    'coinGeckoId' => $coinData['id'],
-                    'symbol' => $coinData['symbol'],
-                    'name' => $coinData['name'],
-                    'isFavorite' => false,
-                    'image' => $coinData['image']['thumb'],
-                    'price' => $coinData['market_data']['current_price'][self::CURRENCY]
-                ]);
+                $coin = $this->coinRepository->getByCoingeckoId($coinData['id']);
+                if (!$coin) {
+                    $coin = $this->coinFactory->createFromArray([
+                        'coinGeckoId' => $coinData['id'],
+                        'symbol' => $coinData['symbol'],
+                        'name' => $coinData['name'],
+                        'isFavorite' => false,
+                        'image' => $coinData['image']['thumb'],
+                        'price' => $coinData['market_data']['current_price'][self::CURRENCY]
+                    ]);
+                } else {
+                    $coin->setPrice($coinData['market_data']['current_price'][self::CURRENCY]);
+                }
                 $this->em->persist($coin);
                 $output ? $progressBar->advance() : null;
             }
