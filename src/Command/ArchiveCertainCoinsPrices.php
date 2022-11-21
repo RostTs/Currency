@@ -7,15 +7,16 @@ use Symfony\Component\Console\Command\Command;
 use App\Service\Coins\ArchivePrices;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Class ArchiveCoinsPricesCommand
+ * Class ArchiveCertainCoinsPrices
  */
 #[AsCommand(
-    name: 'prices:archive',
+    name: 'prices:list:archive',
     description:'Saves coins prices to archive'
 )]
-class ArchiveCoinsPricesCommand extends Command
+class ArchiveCertainCoinsPrices extends Command
 {
     /**
      * @param ArchivePrices $archivePrices
@@ -31,6 +32,7 @@ class ArchiveCoinsPricesCommand extends Command
     {
         parent::configure();
         $this->setName('prices:archive')
+        ->addArgument('list', InputArgument::IS_ARRAY,'List the coins by coingecko id')
         ->setDescription('Saves coins prices to archive');
     }
 

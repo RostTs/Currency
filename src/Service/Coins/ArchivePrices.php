@@ -38,4 +38,11 @@ class ArchivePrices
         $this->em->flush();
 
     }
+
+    
+    public function archiveList(?OutputInterface $output, array $list)
+    {
+        $coins = $this->coinRepository->getByCoingeckoIds($list);
+
+    }
 }
