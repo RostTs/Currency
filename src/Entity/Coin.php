@@ -38,9 +38,9 @@ class Coin
     #[Groups(['list'])]
     private ?\DateTimeInterface $created = null;
 
-    #[ORM\Column(nullable:true)]
+    #[ORM\Column()]
     #[Groups(['list'])]
-    private ?float $price = null;
+    private ?float $price = 0;
 
     #[ORM\Column(nullable:true)]
     #[Groups(['list'])]

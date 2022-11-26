@@ -31,9 +31,7 @@ class ArchiveCertainCoinsPrices extends Command
     protected function configure()
     {
         parent::configure();
-        $this->setName('prices:archive')
-        ->addArgument('list', InputArgument::IS_ARRAY,'List the coins by coingecko id')
-        ->setDescription('Saves coins prices to archive');
+        $this->addArgument('list', InputArgument::IS_ARRAY,'List the coins by coingecko id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -31,9 +31,7 @@ class UpdateCertainCoinsCommand extends Command
     protected function configure()
     {
         parent::configure();
-        $this->setName('coins:list:update')
-        ->addArgument('list', InputArgument::IS_ARRAY,'List the coins by coingecko id')
-        ->setDescription('Saves coins list to DB');
+        $this->addArgument('list', InputArgument::IS_ARRAY,'List the coins by coingecko id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

@@ -27,13 +27,6 @@ class UpdateCoinsCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
-    {
-        parent::configure();
-        $this->setName('coins:save')
-        ->setDescription('Saves coins list to DB');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->coinsCreateService->create($output);

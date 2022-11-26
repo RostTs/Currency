@@ -27,13 +27,6 @@ class ArchiveCoinsPricesCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
-    {
-        parent::configure();
-        $this->setName('prices:archive')
-        ->setDescription('Saves coins prices to archive');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->archivePrices->archive($output);
