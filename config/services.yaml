@@ -7,6 +7,7 @@ parameters:
     coingecko.list: '%env(COINGECKO_LIST_URL)%'
     coingecko.single: '%env(COINGECKO_SINGLE_COIN_URL)%'
     coingecko.price: '%env(COINGECKO_PRICE_URL)%'
+    coingecko.price.history: '%env(COINGECKO_SINGLE_COIN_HISTORY_URL)%'
 
 services:
     # default configuration for services in *this* file

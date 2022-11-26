@@ -23,6 +23,7 @@ class CoinArchiveFactory {
         $coin = new CoinArchive();
         $coin->setCoinId($params['coinId'])
              ->setPrice($params['price'])
+             ->setDate($params['date'])
              ->setUpdated($params['updated']);
 
         return $coin;

@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Service\Coins\ArchivePricesService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use App\Service\Coins\CoinsCreateService;
@@ -20,9 +21,11 @@ class UpdateCertainCoinsCommand extends Command
 {
     /**
      * @param CoinsCreateService $coinsCreateService
+     * @param ArchivePricesService $archivePricesService
      */
     public function __construct(
-        private CoinsCreateService $coinsCreateService
+        private CoinsCreateService $coinsCreateService,
+        private ArchivePricesService $archivePricesService
         )
     {
         parent::__construct();
@@ -37,7 +40,8 @@ class UpdateCertainCoinsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $list = $input->getArgument('list');
-        $this->coinsCreateService->createForList($output,$list);
+        // $this->coinsCreateService->createForList($output,$list);
+        $this->archivePricesService->archiveList($output,$list);
 
         return Command::SUCCESS;
     }

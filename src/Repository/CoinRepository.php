@@ -84,6 +84,6 @@ class CoinRepository extends ServiceEntityRepository
      */
    public function getByCoingeckoId(string $coinGeckoId): ?Coin
     {
-        return $this->findOneBy(['coinGeckoId',$coinGeckoId]);
+        return $this->findOneBy(['coingeckoId' => $coinGeckoId]);
     }
 }
