@@ -15,8 +15,8 @@ use App\Factory\CoinFactory;
 class CoinsCreateService 
 {
     private const COINS_PER_CHUNK = 200;
+    private const PROGRESS_MESSAGE = 'Configuring coins';
     
-
     /**
      * @param CoinsGeckoClient $coinsGeckoClient
      * @param CoinRepository $coinRepository
@@ -73,6 +73,7 @@ class CoinsCreateService
     public function createForList(?OutputInterface $output, array $list) 
     {
         $progressBar = $output ? new ProgressBar($output, count($list)) : null;
+        $output ? $progressBar->setMessage(self::PROGRESS_MESSAGE) : null;
         $output ? $progressBar->start() : null;
             foreach($list as $coin) {
                 $coinData = $this->coinsGeckoClient->getSingle($coin);

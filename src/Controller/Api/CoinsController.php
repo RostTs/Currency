@@ -32,6 +32,23 @@ class CoinsController extends AbstractController
     );
     }
 
+     /**
+     * @Route("/coin/{coin}", name="coin",methods="GET")
+     * 
+     * @param Request $request
+     * @param CoinsGetService $getService
+     */
+    public function getCoin(Coin $coin, Request $request,CoinsGetService $getService): Response
+    {
+       $params = new CoinsFilters($request->query->all());
+       return $this->json(
+        $coin, 
+        Response::HTTP_OK,
+        [],
+        [ObjectNormalizer::GROUPS => ['coin']]
+    );
+    }
+
     /**
      * @Route("/coin/{coin}", name="updateCoin",methods="PATCH")
      * 

@@ -22,6 +22,17 @@ class CoinsGetService
      * 
      * @return array
      */
+    public function get(CoinsFilters $filters):array
+    {
+        $coins = $this->coinRepository->findByFilters($filters);
+        return $coins;
+    }
+
+    /**
+     * @param CoinsFilters $filters
+     * 
+     * @return array
+     */
     public function getAll(CoinsFilters $filters):array
     {
         $coins = $this->coinRepository->findByFilters($filters);
