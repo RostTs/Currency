@@ -9,11 +9,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use App\Factory\CoinArchiveFactory;
 use App\Repository\CoinArchiveRepository;
 use DateTime;
+use App\Entity\Coin;
 
 /**
- * Class ArchivePricesService
+ * Class ArchivePricesCreateService
  */
-class ArchivePricesService
+class ArchivePricesCreateService
 {
     private const PROGRESS_MESSAGE = 'Setting prices for coins';
 
@@ -36,7 +37,7 @@ class ArchivePricesService
     /**
      * @param string[] $coinGeckoIds
      */
-    public function archiveList(?OutputInterface $output, array $coinGeckoIds)
+    public function archiveList(?OutputInterface $output, array $coinGeckoIds): void
     {
         $progressBar = $output ? new ProgressBar($output, count($coinGeckoIds)) : null;
         $output ? $progressBar->setMessage(self::PROGRESS_MESSAGE) : null;
@@ -49,7 +50,7 @@ class ArchivePricesService
                 $date->setTimestamp($price[0]/1000); // Time in milliseconds
 
                 $coinArchive = $this->coinArchiveFactory->createFromArray([
-                    'coinId' => $this->coinRepository->getByCoingeckoId($coinGeckoId),
+                    'coin' => $this->coinRepository->getByCoingeckoId($coinGeckoId),
                     'price' => $price[1],
                     'date' => $date
                 ]);
@@ -59,5 +60,20 @@ class ArchivePricesService
             $output ? $progressBar->advance() : null;
         }
         $output ? $progressBar->finish() : null;
+    }
+
+    /**
+     * @param Coin $coin
+     * @param float$price
+     */
+    public function archiveSinglePrice(Coin $coin, float $price): void
+    {
+        $coinArchive = $this->coinArchiveFactory->createFromArray([
+            'coin' => $coin,
+            'price' => $price,
+            'date' => new DateTime()
+        ]);
+        $this->em->persist($coinArchive);
+        $this->em->flush();
     }
 }

@@ -9,13 +9,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class SaveCoinsCommand
+ * Class CreateCoinsCommand
  */
 #[AsCommand(
     name: 'coins:update',
     description:'Saves coins list to DB'
 )]
-class UpdateCoinsCommand extends Command
+class CreateCoinsCommand extends Command
 {
     /**
      * @param CoinsCreateService $coinsCreateService

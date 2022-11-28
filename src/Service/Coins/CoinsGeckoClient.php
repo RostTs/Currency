@@ -97,4 +97,14 @@ class CoinsGeckoClient
         $coinPrices = $this->coingeckoApiClient->request('GET',$url)->getContent();
         return json_decode($coinPrices, true);
     }
+
+        /**
+     * @param string $coinId
+     * 
+     * @return float
+     */
+    public function getSingleCoinSimplePrice(string $coinId):float
+    {
+        return $this->processChunk([$coinId])[$coinId][self::CURRENCY];
+    }
 }

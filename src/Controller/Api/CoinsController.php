@@ -11,7 +11,7 @@ use App\Service\Coins\CoinsFilters;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use App\Entity\Coin;
 use App\Params\CoinsParams;
-use App\Service\Coins\CoinsUpdateService;
+use App\Service\Coins\CoinUpdateService;
 
 class CoinsController extends AbstractController
 {
@@ -54,12 +54,12 @@ class CoinsController extends AbstractController
      * 
      * @param Coin $coin
      * @param Request $request
-     * @param CoinsUpdateService $coinsUpdateService
+     * @param CoinUpdateService $CoinUpdateService
      */
-    public function update(Coin $coin, Request $request,CoinsUpdateService $coinsUpdateService): Response
+    public function update(Coin $coin, Request $request,CoinUpdateService $CoinUpdateService): Response
     {
         $params = new CoinsParams(json_decode($request->getContent(), true));
-        $coinsUpdateService->update($params,$coin);
+        $CoinUpdateService->update($params,$coin);
         return $this->json(
             $coin, 
             Response::HTTP_OK,

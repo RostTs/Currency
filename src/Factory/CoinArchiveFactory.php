@@ -15,13 +15,13 @@ class CoinArchiveFactory {
     public function createFromArray(array $params = []): CoinArchive
     {
         $template = [
-            'coinId' => null,
+            'coin' => null,
             'price' => 0,
             'updated' => new DateTime()
         ];
         $params = array_merge($template, $params);
         $coin = new CoinArchive();
-        $coin->setCoinId($params['coinId'])
+        $coin->setCoinId($params['coin'])
              ->setPrice($params['price'])
              ->setDate($params['date'])
              ->setUpdated($params['updated']);
