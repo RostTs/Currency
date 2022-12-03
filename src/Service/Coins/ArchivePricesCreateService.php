@@ -40,8 +40,8 @@ class ArchivePricesCreateService
     public function archiveList(?OutputInterface $output, array $coinGeckoIds): void
     {
         $progressBar = $output ? new ProgressBar($output, count($coinGeckoIds)) : null;
-        $output ? $progressBar->setMessage(self::PROGRESS_MESSAGE) : null;
-        $output ? $progressBar->start() : null;
+        $progressBar?->setMessage(self::PROGRESS_MESSAGE);
+        $progressBar?->start();
 
         foreach ($coinGeckoIds as $coinGeckoId) {
             $coinPrices = $this->coinsGeckoClient->getSingleCoinPriceHistory($coinGeckoId);
@@ -57,9 +57,9 @@ class ArchivePricesCreateService
                 $this->em->persist($coinArchive);
             }
             $this->em->flush();
-            $output ? $progressBar->advance() : null;
+            $progressBar?->advance();
         }
-        $output ? $progressBar->finish() : null;
+        $progressBar?->finish();
     }
 
     /**

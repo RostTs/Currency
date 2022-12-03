@@ -48,7 +48,6 @@ class CoinUpdateService
         $coinCurrentPrice = $this->coinsGeckoClient->getSingleCoinSimplePrice($coin->getCoingeckoId());
 
         $coin->setPrice($coinCurrentPrice);
-        $coin->setPriceUpdated(new DateTime());
 
         $this->em->persist($coin);
 

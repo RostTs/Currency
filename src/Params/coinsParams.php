@@ -2,11 +2,6 @@
 
 namespace App\Params;
 
-use App\Repository\CoinRepository;
-use App\Service\Coins\CoinsGeckoClient;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Factory\CoinFactory;
-
 /**
  * Class CoinsParams
  */

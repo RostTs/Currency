@@ -4,8 +4,7 @@ namespace App\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use App\Service\Coins\ArchivePrices;
-use App\Service\Coins\ArchivePricesService;
+use App\Service\Coins\ArchivePricesCreateService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,10 +19,10 @@ use Symfony\Component\Console\Input\InputArgument;
 class ArchiveCertainCoinsPrices extends Command
 {
     /**
-     * @param ArchivePricesService $archivePrices
+     * @param ArchivePricesCreateService $archivePrices
      */
     public function __construct(
-        private ArchivePricesService $archivePrices
+        private ArchivePricesCreateService $archivePrices
         )
     {
         parent::__construct();

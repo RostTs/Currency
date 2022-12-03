@@ -6,7 +6,6 @@ use App\Repository\CoinRepository;
 use App\Service\Coins\ArchivePricesCreateService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use App\Service\Coins\CoinsCreateService;
 use App\Service\Coins\CoinUpdateService;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

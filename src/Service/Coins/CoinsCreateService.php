@@ -30,12 +30,12 @@ class CoinsCreateService
         private CoinFactory $coinFactory
         ) {}
 
-    public function create(?OutputInterface $output)
+    public function create(?OutputInterface $output): void
     {
         $coins = $this->coinsGeckoClient->getAll();
         $progressBar = $output ? new ProgressBar($output, count($coins)) : null;
         $ids = array_column($coins,'id');
-        $output ? $progressBar->start() : null;
+        $progressBar->start();
 
         $prices = $this->coinsGeckoClient->getPrices($ids);
         $chunks = array_chunk($coins,self::COINS_PER_CHUNK); 
@@ -61,20 +61,20 @@ class CoinsCreateService
                 }
                 $this->em->persist($coin);
 
-                $output ? $progressBar->advance() : null;
+                $progressBar?->advance();
             }
         }
         $this->em->flush();
 
-        $output ? $progressBar->finish() : null;
+        $progressBar?->finish();
 
     }
 
-    public function createForList(?OutputInterface $output, array $list) 
+    public function createForList(?OutputInterface $output, array $list): void
     {
         $progressBar = $output ? new ProgressBar($output, count($list)) : null;
-        $output ? $progressBar->setMessage(self::PROGRESS_MESSAGE) : null;
-        $output ? $progressBar->start() : null;
+        $progressBar?->setMessage(self::PROGRESS_MESSAGE);
+        $progressBar?->start();
             foreach($list as $coin) {
                 $coinData = $this->coinsGeckoClient->getSingle($coin);
                 $coin = $this->coinRepository->getByCoingeckoId($coinData['id']);
@@ -91,10 +91,10 @@ class CoinsCreateService
                     $coin->setPrice($coinData['market_data']['current_price'][$this->coinsGeckoClient::CURRENCY]);
                 }
                 $this->em->persist($coin);
-                $output ? $progressBar->advance() : null;
+                $progressBar?->advance();
             }
         $this->em->flush();
-        $output ? $progressBar->finish() : null;
+        $progressBar?->finish();
 
     }
 }

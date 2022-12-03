@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CoinRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -133,6 +134,7 @@ class Coin
 
     public function setPrice (?float $price): self {
         $this->price = $price;
+        $this->priceUpdated = new DateTime();
         return $this;
     }
 

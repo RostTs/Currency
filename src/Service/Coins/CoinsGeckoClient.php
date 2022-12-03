@@ -2,11 +2,9 @@
 
 namespace App\Service\Coins;
 
-use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpClient\Exception\ClientException;
 /**
  * Class CoinsGeckoClient
  */
@@ -63,9 +61,9 @@ class CoinsGeckoClient
         $chunks = array_chunk($ids,self::COINS_PER_CHUNK);
         foreach ($chunks as $chunk) {
             $chunkCoins = $this->processChunk($chunk, self::CURRENCY);
-            $coins = array_merge($coins, $chunkCoins);
-    
+            $coins[] = $chunkCoins;
         }
+        $coins = array_merge([], ...$coins);
         return $coins;
     }
 
