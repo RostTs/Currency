@@ -42,7 +42,7 @@ class CoinUpdateService
      * 
      * @return float
      */
-    public function updateСoinsCurrentPrice(Coin $coin): float
+    public function updateCoinsCurrentPrice(Coin $coin): float
     {
         $coinOldPrice = $coin->getPrice();
         $coinCurrentPrice = $this->coinsGeckoClient->getSingleCoinSimplePrice($coin->getCoingeckoId());

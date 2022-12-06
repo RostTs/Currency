@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Factory\CoinArchiveFactory;
-use App\Repository\CoinArchiveRepository;
 use DateTime;
 use App\Entity\Coin;
 
@@ -20,14 +19,12 @@ class ArchivePricesCreateService
 
     /**
      * @param CoinRepository $coinRepository
-     * @param CoinArchiveRepository $coinArchiveRepository
      * @param EntityManagerInterface $em
      * @param CoinArchiveFactory $coinArchiveFactory
      * @param CoinsGeckoClient $coinsGeckoClient
      */
     public function __construct(
         private CoinRepository $coinRepository,
-        private CoinArchiveRepository $coinArchiveRepository,
         private EntityManagerInterface $em,
         private CoinArchiveFactory $coinArchiveFactory,
         private CoinsGeckoClient $coinsGeckoClient

@@ -37,7 +37,7 @@ class DailyPriceUpdateCommand extends Command
     {
         $coins = $this->coinRepository->findAll();
         foreach ($coins as $coin) {
-            $coinOldPrice = $this->coinUpdateService->updateСoinsCurrentPrice($coin);
+            $coinOldPrice = $this->coinUpdateService->updateCoinsCurrentPrice($coin);
             $this->archivePricesCreateService->archiveSinglePrice($coin, $coinOldPrice);
         }
 

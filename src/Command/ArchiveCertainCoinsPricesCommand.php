@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
     name: 'prices:list:archive',
     description:'Saves coins prices to archive'
 )]
-class ArchiveCertainCoinsPrices extends Command
+class ArchiveCertainCoinsPricesCommand extends Command
 {
     /**
      * @param ArchivePricesCreateService $archivePrices
