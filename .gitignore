@@ -5,6 +5,8 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/db-data/
 /var/
 /vendor/
+.phpunit.result.cache
 ###< symfony/framework-bundle ###

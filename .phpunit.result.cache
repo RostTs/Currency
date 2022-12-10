@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Warning":6,"CoinsGeckoClientTest::testGetAll":4},"times":{"Warning":0.013,"CoinsGeckoClientTest::testGetAll":0.122,"CoinsGeckoClientTest::testGetPrices":0.001}}

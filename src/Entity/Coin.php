@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CoinRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -16,10 +17,11 @@ class Coin
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['list','coin'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['list'])]
+    #[Groups(['list','coin'])]
     private ?string $coingeckoId = null;
 
     #[ORM\Column(length: 255)]
@@ -39,8 +41,8 @@ class Coin
     private ?\DateTimeInterface $created = null;
 
     #[ORM\Column()]
-    #[Groups(['list'])]
-    private ?float $price = null;
+    #[Groups(['list','coin'])]
+    private ?float $price = 0;
 
     #[ORM\Column(nullable:true)]
     #[Groups(['list'])]
@@ -51,6 +53,7 @@ class Coin
     private ?\DateTimeInterface $priceUpdated = null;
 
     #[ORM\OneToMany(mappedBy: 'coinId', targetEntity: CoinArchive::class, orphanRemoval: true)]
+    #[Groups(['coin'])]
     private Collection $archivedPrice;
 
     public function __construct()
@@ -131,6 +134,7 @@ class Coin
 
     public function setPrice (?float $price): self {
         $this->price = $price;
+        $this->priceUpdated = new DateTime();
         return $this;
     }
 

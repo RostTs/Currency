@@ -9,13 +9,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class SaveCoinsCommand
+ * Class CreateCoinsCommand
  */
 #[AsCommand(
     name: 'coins:update',
     description:'Saves coins list to DB'
 )]
-class UpdateCoinsCommand extends Command
+class CreateCoinsCommand extends Command
 {
     /**
      * @param CoinsCreateService $coinsCreateService
@@ -25,13 +25,6 @@ class UpdateCoinsCommand extends Command
         )
     {
         parent::__construct();
-    }
-
-    protected function configure()
-    {
-        parent::configure();
-        $this->setName('coins:save')
-        ->setDescription('Saves coins list to DB');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

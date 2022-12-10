@@ -11,12 +11,12 @@ use App\Service\Coins\CoinsFilters;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use App\Entity\Coin;
 use App\Params\CoinsParams;
-use App\Service\Coins\CoinsUpdateService;
+use App\Service\Coins\CoinUpdateService;
 
 class CoinsController extends AbstractController
 {
     /**
-     * @Route("/list", name="list",methods="GET")
+     * @Route("/list", name="api_coins_list",methods="GET")
      * 
      * @param Request $request
      * @param CoinsGetService $getService
@@ -32,17 +32,34 @@ class CoinsController extends AbstractController
     );
     }
 
+     /**
+     * @Route("/coin/{coin}", name="api_coin",methods="GET")
+     * 
+     * @param Request $request
+     * @param CoinsGetService $getService
+     */
+    public function getCoin(Coin $coin, Request $request,CoinsGetService $getService): Response
+    {
+       $params = new CoinsFilters($request->query->all());
+       return $this->json(
+        $coin, 
+        Response::HTTP_OK,
+        [],
+        [ObjectNormalizer::GROUPS => ['coin']]
+    );
+    }
+
     /**
-     * @Route("/coin/{coin}", name="updateCoin",methods="PATCH")
+     * @Route("/coin/{coin}", name="api_update_coin",methods="PATCH")
      * 
      * @param Coin $coin
      * @param Request $request
-     * @param CoinsUpdateService $coinsUpdateService
+     * @param CoinUpdateService $CoinUpdateService
      */
-    public function update(Coin $coin, Request $request,CoinsUpdateService $coinsUpdateService): Response
+    public function update(Coin $coin, Request $request,CoinUpdateService $CoinUpdateService): Response
     {
         $params = new CoinsParams(json_decode($request->getContent(), true));
-        $coinsUpdateService->update($params,$coin);
+        $CoinUpdateService->update($params,$coin);
         return $this->json(
             $coin, 
             Response::HTTP_OK,

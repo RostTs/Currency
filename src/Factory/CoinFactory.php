@@ -18,7 +18,6 @@ class CoinFactory {
             'isFavorite' => false,
             'price' => 0,
             'image' => null,
-            'priceUpdated' => (isset($params['price'])) ? new DateTime() : null,
             'created' => new DateTime()
         ];
         $params = array_merge($template, $params);
@@ -29,7 +28,6 @@ class CoinFactory {
              ->setIsFavorite($params['isFavorite'])
              ->setPrice($params['price'])
              ->setImage($params['image'])
-             ->setPriceUpdated($params['priceUpdated'])
              ->setCreated($params['created']);
 
         return $coin;
