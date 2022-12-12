@@ -2,12 +2,25 @@ version: '3'
 
 services:
 
+  # nginx-front:
+  #   image: nginx:latest
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - ./nginx/angular.conf:/etc/nginx/conf.d/default.conf
+
+  # angular:
+  #   build: front-end
+  #   volumes:
+  #     - "./front-end:/app"
+
   nginx:
     image: nginx:latest
     ports:
       - ${NGINX_PORT:-80}:80
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./php.conf:/etc/nginx/conf.d/default.conf
+      - ./:/app
 
   php:
     build: ./

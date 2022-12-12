@@ -9,4 +9,5 @@
 /var/
 /vendor/
 .phpunit.result.cache
+front-end/.vscode
 ###< symfony/framework-bundle ###
