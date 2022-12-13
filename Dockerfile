@@ -13,4 +13,3 @@ RUN curl -sL https://getcomposer.org/installer | php -- --install-dir /usr/bin -
 ARG USER_ID=1000
 RUN groupadd --gid "$USER_ID" admin \
     && useradd --uid "$USER_ID" -g www-data admin --create-home \
-#CMD ["php-fpm"]

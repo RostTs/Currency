@@ -24,6 +24,8 @@ services:
 
   php:
     build: ./
+    ports:
+      - '8500:9000'
     environment:
       PHP_IDE_CONFIG: "serverName=shop"
     volumes:
