@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\CoinRepository;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -11,14 +14,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name:"coins")]
 class Coin
 {
-    //TODO: Concert annotations
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['list','coin'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['list'])]
+    #[Groups(['list','coin'])]
     private ?string $coingeckoId = null;
 
     #[ORM\Column(length: 255)]
@@ -36,6 +39,27 @@ class Coin
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['list'])]
     private ?\DateTimeInterface $created = null;
+
+    #[ORM\Column()]
+    #[Groups(['list','coin'])]
+    private ?float $price = 0;
+
+    #[ORM\Column(nullable:true)]
+    #[Groups(['list'])]
+    private ?string $image = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['list'])]
+    private ?\DateTimeInterface $priceUpdated = null;
+
+    #[ORM\OneToMany(mappedBy: 'coinId', targetEntity: CoinArchive::class, orphanRemoval: true)]
+    #[Groups(['coin'])]
+    private Collection $archivedPrice;
+
+    public function __construct()
+    {
+        $this->archivedPrice = new ArrayCollection();
+    }
 
     
 
@@ -100,6 +124,64 @@ class Coin
     public function setIsFavorite(bool $isFavorite): self
     {
         $this->isFavorite = $isFavorite;
+
+        return $this;
+    }
+
+    public function getPrice (): ?float {
+        return $this->price;
+    }
+
+    public function setPrice (?float $price): self {
+        $this->price = $price;
+        $this->priceUpdated = new DateTime();
+        return $this;
+    }
+
+    public function getImage (): ?string {
+        return $this->image;
+    }
+
+    public function setImage (?string $imagePath): self {
+        $this->image = $imagePath;
+        return $this;
+    }
+
+    public function getPriceUpdated (): ?\DateTimeInterface {
+        return $this->priceUpdated;
+    }
+
+    public function setPriceUpdated (?\DateTimeInterface $priceUpdated): self {
+        $this->priceUpdated = $priceUpdated;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CoinArchive>
+     */
+    public function getArchivedPrice(): Collection
+    {
+        return $this->archivedPrice;
+    }
+
+    public function addArchivedPrice(CoinArchive $archivedPrice): self
+    {
+        if (!$this->archivedPrice->contains($archivedPrice)) {
+            $this->archivedPrice->add($archivedPrice);
+            $archivedPrice->setCoinId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArchivedPrice(CoinArchive $archivedPrice): self
+    {
+        if ($this->archivedPrice->removeElement($archivedPrice)) {
+            // set the owning side to null (unless already changed)
+            if ($archivedPrice->getCoinId() === $this) {
+                $archivedPrice->setCoinId(null);
+            }
+        }
 
         return $this;
     }

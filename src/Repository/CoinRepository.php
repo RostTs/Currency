@@ -64,13 +64,26 @@ class CoinRepository extends ServiceEntityRepository
      * 
      * @return int[]
      */
-   public function getExistingByIds(array $coins): array
+   public function getByCoingeckoIds(array $coins): array
    {
-        return $this->createQueryBuilder('c')
-            ->select('coingeckoId')
-            ->andWhere('c.coingeckoId = :coins')
+        $result = $this->createQueryBuilder('c')
+            ->select('c.coingeckoId')
+            ->where('c.coingeckoId in (:coins)')
             ->setParameter('coins', $coins)
             ->getQuery()
             ->getResult();
+
+            return array_column($result,'coingeckoId');
+            
+    }
+
+    /**
+     * @param string $coinGeckoId
+     * 
+     * @return Coin|null
+     */
+   public function getByCoingeckoId(string $coinGeckoId): ?Coin
+    {
+        return $this->findOneBy(['coingeckoId' => $coinGeckoId]);
     }
 }

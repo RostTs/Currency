@@ -15,17 +15,20 @@ class CoinFactory {
     public function createFromArray(array $params = []): Coin
     {
         $template = [
-            'isFavorite' => 0,
+            'isFavorite' => false,
+            'price' => 0,
+            'image' => null,
             'created' => new DateTime()
         ];
         $params = array_merge($template, $params);
-
         $coin = new Coin();
-        $coin->setCoingeckoId($template['coinGeckoId'])
-             ->setSymbol($template['symbol'])
-             ->setName($template['name'])
-             ->setIsFavorite($template['isFavorite'])
-             ->setCreated($template['created']);
+        $coin->setCoingeckoId($params['coinGeckoId'])
+             ->setSymbol($params['symbol'])
+             ->setName($params['name'])
+             ->setIsFavorite($params['isFavorite'])
+             ->setPrice($params['price'])
+             ->setImage($params['image'])
+             ->setCreated($params['created']);
 
         return $coin;
     }
