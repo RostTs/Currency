@@ -13,13 +13,6 @@ services:
       - ./front-end:/app:rw
     working_dir: /app
 
-#  angular:
-#    build: front-end
-#    ports:
-#     - ${ANGULAR_PORT:-4200}:4200
-#    volumes:
-#      - ./front-end:/app
-
   nginx:
     image: nginx:latest
     ports:
@@ -48,7 +41,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
       # POSTGRES_HOST_AUTH_METHOD: "trust"
       POSTGRES_USER: ${POSTGRES_USER:-root}
-      PGDATA: /var/lib/postgresql/data/secondary_folder/
+      PGDATA: /var/lib/postgresql/data/db-files/
     volumes:
       - ./db-data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
