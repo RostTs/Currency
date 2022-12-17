@@ -7,7 +7,18 @@
 /public/bundles/
 /db-data/
 /var/
+/db-data/
 /vendor/
 .phpunit.result.cache
 front-end/.vscode
 ###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
