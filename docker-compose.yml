@@ -1,25 +1,31 @@
 version: '3'
 
 services:
+  angular:
+    command: bash
+    build: front-end
+    ports:
+      - ${ANGULAR_PORT:-4200}:4200
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./front-end:/app:rw
+    working_dir: /app
 
-  # nginx-front:
-  #   image: nginx:latest
-  #   ports:
-  #     - 8080:8080
-  #   volumes:
-  #     - ./nginx/angular.conf:/etc/nginx/conf.d/default.conf
-
-  # angular:
-  #   build: front-end
-  #   volumes:
-  #     - "./front-end:/app"
+#  angular:
+#    build: front-end
+#    ports:
+#     - ${ANGULAR_PORT:-4200}:4200
+#    volumes:
+#      - ./front-end:/app
 
   nginx:
     image: nginx:latest
     ports:
       - ${NGINX_PORT:-80}:80
     volumes:
-      - ./nginx.conf:/etc/conf.d/default.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./:/app
 
   php:
