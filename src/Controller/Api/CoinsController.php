@@ -16,7 +16,7 @@ use App\Service\Coins\CoinUpdateService;
 class CoinsController extends AbstractController
 {
     /**
-     * @Route("/list", name="api_coins_list",methods="GET")
+     * @Route("/api/list", name="api_coins_list",methods="GET")
      * 
      * @param Request $request
      * @param CoinsGetService $getService
@@ -33,7 +33,7 @@ class CoinsController extends AbstractController
     }
 
      /**
-     * @Route("/coin/{coin}", name="api_coin",methods="GET")
+     * @Route("/api/coin/{coin}", name="api_coin",methods="GET")
      * 
      * @param Request $request
      * @param CoinsGetService $getService
@@ -50,7 +50,7 @@ class CoinsController extends AbstractController
     }
 
     /**
-     * @Route("/coin/{coin}", name="api_update_coin",methods="PATCH")
+     * @Route("/api/coin/{coin}", name="api_update_coin",methods="PATCH")
      * 
      * @param Coin $coin
      * @param Request $request
