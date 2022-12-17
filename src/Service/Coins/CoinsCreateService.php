@@ -5,8 +5,6 @@ namespace App\Service\Coins;
 use App\Repository\CoinRepository;
 use App\Service\Coins\CoinsGeckoClient;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Coin;
-use DateTime;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Factory\CoinFactory;
@@ -17,8 +15,8 @@ use App\Factory\CoinFactory;
 class CoinsCreateService 
 {
     private const COINS_PER_CHUNK = 200;
-    private const CURRENCY = 'usd';
-
+    private const PROGRESS_MESSAGE = 'Configuring coins';
+    
     /**
      * @param CoinsGeckoClient $coinsGeckoClient
      * @param CoinRepository $coinRepository
@@ -32,14 +30,14 @@ class CoinsCreateService
         private CoinFactory $coinFactory
         ) {}
 
-    public function create(?OutputInterface $output)
+    public function create(?OutputInterface $output): void
     {
         $coins = $this->coinsGeckoClient->getAll();
         $progressBar = $output ? new ProgressBar($output, count($coins)) : null;
         $ids = array_column($coins,'id');
-        $output ? $progressBar->start() : null;
+        $progressBar->start();
 
-        $prices = $this->coinsGeckoClient->getPrices($ids,self::CURRENCY);
+        $prices = $this->coinsGeckoClient->getPrices($ids);
         $chunks = array_chunk($coins,self::COINS_PER_CHUNK); 
 
         foreach ($chunks as $chunk) {
@@ -48,23 +46,55 @@ class CoinsCreateService
             $result = $this->coinRepository->getByCoingeckoIds($chunkIds);
 
             foreach($chunk as $singleCoin){
-            
+                $coinPrice = ($prices[$singleCoin->id][$this->coinsGeckoClient::CURRENCY]) ?? 0;
                 if(!in_array($singleCoin->id,$result)){
                     $coin = $this->coinFactory->createFromArray([
                         'coinGeckoId' => $singleCoin->id,
                         'symbol' => $singleCoin->symbol,
                         'name' => $singleCoin->name,
                         'isFavorite' => false,
-                        'price' => ($prices[$singleCoin->id][self::CURRENCY]) ?? 0
+                        'price' => $coinPrice
                     ]);
-                    $this->em->persist($coin);
+                } else {
+                    $coin = $this->coinRepository->getByCoingeckoId($singleCoin->id);
+                    $coin->setPrice($coinPrice);
                 }
-                $output ? $progressBar->advance() : null;
+                $this->em->persist($coin);
+
+                $progressBar?->advance();
             }
         }
         $this->em->flush();
 
-        $output ? $progressBar->finish() : null;
+        $progressBar?->finish();
+
+    }
+
+    public function createForList(?OutputInterface $output, array $list): void
+    {
+        $progressBar = $output ? new ProgressBar($output, count($list)) : null;
+        $progressBar?->setMessage(self::PROGRESS_MESSAGE);
+        $progressBar?->start();
+            foreach($list as $coin) {
+                $coinData = $this->coinsGeckoClient->getSingle($coin);
+                $coin = $this->coinRepository->getByCoingeckoId($coinData['id']);
+                if (!$coin) {
+                    $coin = $this->coinFactory->createFromArray([
+                        'coinGeckoId' => $coinData['id'],
+                        'symbol' => $coinData['symbol'],
+                        'name' => $coinData['name'],
+                        'isFavorite' => false,
+                        'image' => $coinData['image']['thumb'],
+                        'price' => $coinData['market_data']['current_price'][$this->coinsGeckoClient::CURRENCY]
+                    ]);
+                } else {
+                    $coin->setPrice($coinData['market_data']['current_price'][$this->coinsGeckoClient::CURRENCY]);
+                }
+                $this->em->persist($coin);
+                $progressBar?->advance();
+            }
+        $this->em->flush();
+        $progressBar?->finish();
 
     }
 }

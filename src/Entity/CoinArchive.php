@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CoinArchiveRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CoinArchiveRepository::class)]
 class CoinArchive
@@ -19,7 +20,12 @@ class CoinArchive
     private ?Coin $coinId = null;
 
     #[ORM\Column]
-    private ?float $price = null;
+    #[Groups(['coin'])]
+    private ?float $price = 0;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['coin'])]
+    private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updated = null;
@@ -61,6 +67,19 @@ class CoinArchive
     public function setUpdated(\DateTimeInterface $updated): self
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+
+    
+    public function getDate(): \DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

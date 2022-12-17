@@ -76,4 +76,14 @@ class CoinRepository extends ServiceEntityRepository
             return array_column($result,'coingeckoId');
             
     }
+
+    /**
+     * @param string $coinGeckoId
+     * 
+     * @return Coin|null
+     */
+   public function getByCoingeckoId(string $coinGeckoId): ?Coin
+    {
+        return $this->findOneBy(['coingeckoId' => $coinGeckoId]);
+    }
 }
