@@ -12,4 +12,6 @@ USER node
 
 WORKDIR /application
 
+EXPOSE 4200
+
 CMD [ "bash" ]
