@@ -8,7 +8,7 @@ import { Coin } from '../interfaces/coin.interface';
   styleUrls: ['./coins.component.scss']
 })
 export class CoinsComponent implements OnInit{
-  coins: Coin;
+  coins: Coin[];
   
   constructor(private service:CoinsService) {}
   

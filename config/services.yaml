@@ -27,6 +27,7 @@ services:
 
     Symfony\Component\Cache\Adapter\FilesystemAdapter:
         autowire: true
+    Symfony\Component\HttpKernel\Profiler\Profiler: '@profiler'
     # coins.get.servise:
     #     class: 'App\Service\Coins\CoinsGetService'
     

@@ -13,8 +13,8 @@ export class CoinsService {
      
     constructor(private httpClient: HttpClient) { }
     
-    getCoins(): Observable<Coin>{
-      return this.httpClient.get<Coin>(this.url);
+    getCoins(): Observable<Coin[]>{
+      return this.httpClient.get<Coin[]>(this.url);
     }
     
 }

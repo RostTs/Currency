@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.11",
+        "nelmio/cors-bundle": "^2.2",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/cache": "6.0.*",
         "symfony/console": "6.0.*",
@@ -85,6 +86,8 @@
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "6.0.*",
         "symfony/css-selector": "6.0.*",
-        "symfony/phpunit-bridge": "^6.1"
+        "symfony/phpunit-bridge": "^6.1",
+        "symfony/stopwatch": "6.0.*",
+        "symfony/web-profiler-bundle": "6.0.*"
     }
 }
