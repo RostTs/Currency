@@ -25,8 +25,7 @@ class CoinsController extends AbstractController
     {
        $params = new CoinsFilters($request->query->all());
        return $this->json(
-        [1,2,3], 
-        // $getService->getAll($params), 
+        $getService->getAll($params), 
         Response::HTTP_OK,
         [],
         [ObjectNormalizer::GROUPS => ['list']]
@@ -69,15 +68,4 @@ class CoinsController extends AbstractController
         );
     }
 
-        /**
-     * @Route("/api/test", name="testt",methods="GET")
-     * 
-     * @param Request $request
-     */
-    public function test( Request $request): Response
-    {
-        return $this->render('home.html.twig',[
-            'title' => 'yo',
-        ]);
-    }
 }

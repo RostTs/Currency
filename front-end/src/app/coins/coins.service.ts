@@ -13,8 +13,19 @@ export class CoinsService {
      
     constructor(private httpClient: HttpClient) { }
     
-    getCoins(): Observable<Coin[]>{
+   public getCoins(pageSize: number = null, page: number = null): Observable<Coin[]>{
+      let url = this.buildUrl({'pageSize': pageSize, 'page': page});
       return this.httpClient.get<Coin[]>(this.url);
     }
+
+   private buildUrl(params: any) {
+    let url = new URL(this.url);
+    let urlParams = url.searchParams;
+      // params.forEach((param) => {
+      //   if (param) {
+      //     url = url + ''
+      //   }
+      // });
+   } 
     
 }

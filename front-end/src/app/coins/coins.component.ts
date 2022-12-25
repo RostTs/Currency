@@ -8,14 +8,16 @@ import { Coin } from '../interfaces/coin.interface';
   styleUrls: ['./coins.component.scss']
 })
 export class CoinsComponent implements OnInit{
-  coins: Coin[];
+  coins: Coin[];;
+  private pageSize: number;
+  private page: number;
   
   constructor(private service:CoinsService) {}
   
   ngOnInit() {
-      this.service.getCoins()
-        .subscribe(response => {
-          this.coins = response;         
-        });
+      this.service.getCoins(1,2)
+        // .subscribe(response => {
+        //   this.coins = response;         
+        // });
   }
 }
