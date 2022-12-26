@@ -52,7 +52,7 @@ class CoinsFilters {
      */
     public function getOffset(): int
     {
-        return ($this->page > 1) ? $this->page * $this->pageSize : 0;
+        return ($this->page > 1) ? ($this->page - 1) * $this->pageSize : 0;
     }
 
 }

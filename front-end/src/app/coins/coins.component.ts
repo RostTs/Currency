@@ -8,16 +8,22 @@ import { Coin } from '../interfaces/coin.interface';
   styleUrls: ['./coins.component.scss']
 })
 export class CoinsComponent implements OnInit{
-  coins: Coin[];;
-  private pageSize: number;
-  private page: number;
-  
+  coins: Coin[];
+  pageSize: number = 10;
+  page: number;
+
   constructor(private service:CoinsService) {}
-  
+
   ngOnInit() {
-      this.service.getCoins(1,2)
-        // .subscribe(response => {
-        //   this.coins = response;         
-        // });
+      this.setCoins();
+  }
+
+  setCoins() {
+    this.service.getCoins(this.pageSize)
+      .subscribe(response => {
+        this.coins = response.body;
+        console.log(response.headers.has('Range'));
+      });
+    // this.coins = this.service.getCoins();
   }
 }

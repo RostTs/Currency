@@ -1,11 +1,11 @@
 <div class="d-flex flex-row-reverse mt-5">
-<select class="form-select amount-filter ">
-    <option selected>10</option>
-    <option value="1">25</option>
-    <option value="2">50</option>
+<select class="form-select amount-filter" [(ngModel)]='pageSize' (change)="setCoins()">
+    <option value="10">10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
   </select>
 </div>
-<div *ngFor="let coin of coins" class="d-flex justify-content-center mt-5"> 
+<div *ngFor="let coin of coins" class="d-flex justify-content-center mt-5">
     <img class="d-inline coin-image" src="{{coin.image}}">
     <p class="ms-3 d-inline">{{coin.name}}</p>
     <p class="ms-3 d-inline">{{coin.price}}</p>

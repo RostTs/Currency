@@ -27,7 +27,7 @@ class CoinsController extends AbstractController
        return $this->json(
         $getService->getAll($params), 
         Response::HTTP_OK,
-        [],
+        ['Range' => $getService->getRange($params)],
         [ObjectNormalizer::GROUPS => ['list']]
     );
     }

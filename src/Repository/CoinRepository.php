@@ -60,6 +60,23 @@ class CoinRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param CoinsFilters $filters
+     *
+     * @return int
+     */
+    public function getTotalResultsByFilters(CoinsFilters $filters): int
+    {
+        $qb = $this->createQueryBuilder('c');
+        if($filters->getIsFavorite()) {
+            $qb->andWhere('c.isFavorite = :isFavorite')
+                ->setParameter('isFavorite', $filters->getIsFavorite());
+        }
+        return $qb->select('count(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
      * @param int[] $coins
      * 
      * @return int[]

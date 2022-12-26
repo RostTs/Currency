@@ -36,4 +36,18 @@ class CoinsGetService
     {
         return $this->coinRepository->findByFilters($filters);
     }
+
+    /**
+     * @param CoinsFilters $filters
+     *
+     * @return string
+     */
+    public function getRange(CoinsFilters $filters): string
+    {
+        $total = $this->coinRepository->getTotalResultsByFilters($filters);
+
+        $offset = $filters->getOffset();
+        $lastRecord = ($total > $offset + $filters->getPageSize())? $offset + $filters->getPageSize(): $total;
+        return "coins=$offset-$lastRecord/$total";
+    }
 }
